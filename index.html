@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>IOSignal client</title>
+  <title>node.js ws vs WebSocket</title>
 </head>
 <style>
   #messages li:last-child {
@@ -14,11 +14,14 @@
 </style>
 <body>
   <h2>Status: <span id="status">Disconnected</span></h2>
-  <h3>1. text message</h3>
+  <h3>1. send text message</h3>
+  <p>When the button is pressed, a text message is sent to the server. The server responds with the same message.</p>
   <button id="sendText">send text</button>
   <h3>2. send binary frame data</h3>
+  <p>Binary frame data is sent. The server modifies the first byte to 255 and returns data of the same byte size.</p>
   <button id="sendBinary">send binary frame: 5bytes</button>
-  <h3>3. request message</h3>
+  <h3>3. request 4bytes</h3>
+  <p>Request the server to send 4-byte binary data. The received byte size should be 4 bytes.</p>
   <button id="requestBtn">request_4bytes</button>
   <h2>Messages:</h2>
   <ul id="messages"></ul>
@@ -50,7 +53,6 @@
 
     socket.onopen = function (e) {
       status.innerText = "open"
-      socket.send("hello this is browser.");
     };
 
     socket.onmessage = function (event) {
@@ -58,12 +60,12 @@
         //binary frame
         let data = new Uint8Array( event.data )
         let size = data.byteLength
-        appendMessage(`received: binary frame: ${ data} : ${size}bytes.`);
+        appendMessage(`[binary frame] ${ data} : ${size}bytes.`);
         
 
       }else{
         //text frame
-        appendMessage(`received: text frame: ${event.data}`);
+        appendMessage(`[text frame] ${event.data}`);
       }
     };
 
