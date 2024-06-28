@@ -36,9 +36,11 @@ wss.on('connection', function connection(ws) {
     ws.on('message', function message(data , isBinary) {
         if(isBinary){
             console.log(data.toString('hex') )
-            
+            data[0] = 255
+            ws.send( data )
         }else{
             console.log('received: %s', data);
+            ws.send('reply')
         }
     });
   

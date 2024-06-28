@@ -36,13 +36,24 @@
 
     // fircat io client.
     let socket = new WebSocket(wsURL)
+    socket.binaryType = "arraybuffer";
+
     socket.onopen = function (e) {
       status.innerText = "open"
       socket.send("hello this is browser.");
     };
 
     socket.onmessage = function (event) {
-      appendMessage(`[message] 서버로부터 전송받은 데이터: ${event.data}`);
+      if( event.data instanceof ArrayBuffer ){
+        //binary frame
+        let data = new Uint8Array( event.data )
+        appendMessage(`[message] 서버로부터 전송받은 binary frame: ${ data }`);
+        
+
+      }else{
+        //text frame
+        appendMessage(`[message] 서버로부터 전송받은 text frame: ${event.data}`);
+      }
     };
 
     socket.onclose = function (event) {
