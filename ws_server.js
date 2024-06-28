@@ -33,12 +33,16 @@ const wss = new WebSocketServer({ server: httpServer});
 wss.on('connection', function connection(ws) {
     ws.on('error', console.error);
   
-    ws.on('message', function message(data) {
-      console.log('received: %s', data);
+    ws.on('message', function message(data , isBinary) {
+        if(isBinary){
+            console.log(data.toString('hex') )
+            
+        }else{
+            console.log('received: %s', data);
+        }
     });
   
     ws.send('something');
   });
 
 
-  

@@ -8,6 +8,8 @@
 
 <body>
   <h2>Status: <span id="status">Disconnected</span></h2>
+  <button id="sendText">send text</button>
+  <button id="sendBinary">send binary</button>
   <h2>Messages:</h2>
   <ul id="messages"></ul>
 
@@ -57,6 +59,14 @@
       appendMessage(`[error]`);
     };
 
+
+    sendText.addEventListener('click', ()=>{
+      socket.send( "text message" )
+    })
+    sendBinary.addEventListener('click', ()=>{
+      let buffer = new Uint8Array(20)
+      socket.send( buffer )
+    })
 
   </script>
 </body>
