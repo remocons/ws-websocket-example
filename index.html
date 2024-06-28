@@ -47,7 +47,8 @@
       if( event.data instanceof ArrayBuffer ){
         //binary frame
         let data = new Uint8Array( event.data )
-        appendMessage(`[message] 서버로부터 전송받은 binary frame: ${ data }`);
+        let size = data.byteLength
+        appendMessage(`[message] 서버로부터 전송받은 binary frame: ${ data} : ${size}bytes.`);
         
 
       }else{
