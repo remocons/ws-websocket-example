@@ -5,11 +5,21 @@
   <meta charset="UTF-8" />
   <title>IOSignal client</title>
 </head>
+<style>
+  #messages li:last-child {
+    border: 2px solid orange;
+  }
 
+
+</style>
 <body>
   <h2>Status: <span id="status">Disconnected</span></h2>
+  <h3>1. text message</h3>
   <button id="sendText">send text</button>
-  <button id="sendBinary">send binary</button>
+  <h3>2. send binary frame data</h3>
+  <button id="sendBinary">send binary frame: 5bytes</button>
+  <h3>3. request message</h3>
+  <button id="requestBtn">request_4bytes</button>
   <h2>Messages:</h2>
   <ul id="messages"></ul>
 
@@ -48,12 +58,12 @@
         //binary frame
         let data = new Uint8Array( event.data )
         let size = data.byteLength
-        appendMessage(`[message] 서버로부터 전송받은 binary frame: ${ data} : ${size}bytes.`);
+        appendMessage(`received: binary frame: ${ data} : ${size}bytes.`);
         
 
       }else{
         //text frame
-        appendMessage(`[message] 서버로부터 전송받은 text frame: ${event.data}`);
+        appendMessage(`received: text frame: ${event.data}`);
       }
     };
 
@@ -61,9 +71,9 @@
       status.innerText = "close"
 
       if (event.wasClean) {
-        appendMessage(`[close] 커넥션이 정상적으로 종료되었습니다(code=${event.code} reason=${event.reason})`);
+        appendMessage(`[close] (code=${event.code} reason=${event.reason})`);
       } else {
-        appendMessage('[close] 커넥션이 죽었습니다.');
+        appendMessage('[close]');
       }
     };
 
@@ -75,8 +85,13 @@
     sendText.addEventListener('click', ()=>{
       socket.send( "text message" )
     })
+
+    requestBtn.addEventListener('click', ()=>{
+      socket.send( "request_4bytes" )
+    })
+
     sendBinary.addEventListener('click', ()=>{
-      let buffer = new Uint8Array(20)
+      let buffer = new Uint8Array(5)
       socket.send( buffer )
     })
 

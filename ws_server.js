@@ -39,13 +39,16 @@ wss.on('connection', function connection(ws) {
             console.log(data.toString('hex') )
             data[0] = 255
             ws.send( data )
+        }else if( data == 'request_4bytes'){
+            let buffer4 = Buffer.alloc(4)
+            ws.send( buffer4)
         }else{
             console.log('received: %s', data);
-            ws.send('reply')
+            ws.send('echo: ' + data)
         }
     });
   
-    ws.send('something');
+    ws.send('server is ready.');
   });
 
 
